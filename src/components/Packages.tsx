@@ -5,7 +5,7 @@ const Packages = () => {
   const packages = [
     {
       name: "Starter",
-      price: "₹5,000",
+      price: "₹6,000",
       period: "/month",
       description: "Perfect for small businesses starting their digital journey",
       features: [
