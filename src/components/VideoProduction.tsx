@@ -3,12 +3,12 @@ import { Camera, Home, Building2, Package, Mic, Plane, Calendar } from "lucide-r
 
 const VideoProduction = () => {
   const videoServices = [
-    { icon: Home, title: "Property Shoots", description: "Interior + Drone coverage" },
-    { icon: Building2, title: "Business Profiles", description: "Company showcase videos" },
+    { icon: Home, title: "Property Shoots", description: "Interior + Ai Generated" },
+    { icon: Building2, title: "Hotel Shoots", description: "Hotel showcase videos" },
     { icon: Package, title: "Product Videos", description: "Professional product demos" },
-    { icon: Mic, title: "Corporate Interviews", description: "Executive testimonials" },
+    { icon: Mic, title: "Quality Audio", description: "Sounds Matter" },
     { icon: Plane, title: "Drone Shoots", description: "Aerial cinematography" },
-    { icon: Calendar, title: "Event Coverage", description: "Conferences & launches" },
+    { icon: Calendar, title: "On time delivery", description: "24x7 Support" },
   ];
 
   return (
@@ -28,17 +28,16 @@ const VideoProduction = () => {
               Professional <span className="gradient-text">Video Shoots</span> & Photography
             </h2>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Capture your brand's story with stunning visuals. From property tours to corporate profiles,
-              we deliver cinematic quality that engages your audience.
+              Capture your brand's story with stunning visuals. From property tours we deliver quality that engages your audience.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Button variant="hero" size="lg" asChild>
                 <a href="#contact">Book a Video Shoot</a>
               </Button>
-              <Button variant="outlineGlow" size="lg" asChild>
+              {/* <Button variant="outlineGlow" size="lg" asChild>
                 <a href="#portfolio">View Shoots</a>
-              </Button>
+              </Button> */}
             </div>
           </div>
 

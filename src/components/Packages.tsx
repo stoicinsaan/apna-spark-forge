@@ -5,13 +5,13 @@ const Packages = () => {
   const packages = [
     {
       name: "Starter",
-      price: "₹15,000",
+      price: "₹5,000",
       period: "/month",
       description: "Perfect for small businesses starting their digital journey",
       features: [
         "Basic Website Design",
         "Social Media Setup (2 Platforms)",
-        "5 Posts/Reels per Month",
+        "12 Posts/Reels per Month",
         "Basic SEO Setup",
         "Monthly Performance Report",
         "Email Support",
@@ -19,15 +19,15 @@ const Packages = () => {
     },
     {
       name: "Growth",
-      price: "₹35,000",
+      price: "₹15,000",
       period: "/month",
       description: "For growing businesses ready to scale their online presence",
       popular: true,
       features: [
         "Professional Website + E-commerce",
         "Social Media Management (4 Platforms)",
-        "15 Posts/Reels + 2 Videos per Month",
-        "Advanced SEO + Google Ads",
+        "15 Posts/Reels + 10 Videos per Month",
+        "SEO + Google Ads",
         "Content Writing + Graphics",
         "Email & WhatsApp Marketing",
         "Weekly Analytics & Reports",
@@ -36,13 +36,13 @@ const Packages = () => {
     },
     {
       name: "Business Pro",
-      price: "₹75,000",
+      price: "₹30,000",
       period: "/month",
       description: "Enterprise solution for maximum growth and visibility",
       features: [
         "Custom Website + Full Branding",
         "Complete Social Media Suite",
-        "30 Posts/Reels + 4 Professional Videos",
+        "30 Posts/Reels + 7 Professional Videos",
         "Full SEO + Multi-platform Ads",
         "Video Shoots (Property/Business)",
         "Influencer Collaboration",

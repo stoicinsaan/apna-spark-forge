@@ -84,7 +84,7 @@ const Contact = () => {
               <h3 className="font-semibold text-lg mb-3">Why Choose Us?</h3>
               <ul className="space-y-2 text-muted-foreground text-sm">
                 <li>✅ 7-Day Free Trial - Risk-free</li>
-                <li>✅ 500+ Successful Projects</li>
+                <li>✅ 50+ Successful Projects</li>
                 <li>✅ Dedicated Account Manager</li>
                 <li>✅ 24/7 Support Available</li>
                 <li>✅ Money-Back Guarantee</li>

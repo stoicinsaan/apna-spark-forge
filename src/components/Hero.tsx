@@ -28,7 +28,7 @@ const Hero = () => {
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto">
-            Websites • SEO • Ads • Video Shoots — 7-Day Free Trial included
+            Websites • SEO • Ads • Graphic — 7-Day Free Trial included
           </p>
 
           {/* CTA Buttons */}
