@@ -13,12 +13,33 @@ const Contact = () => {
     service: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state ke liye
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic would go here
-    toast.success("Thank you! We'll get back to you within 24 hours.");
-    setFormData({ name: "", email: "", phone: "", service: "", message: "" });
+    setIsSubmitting(true); // Form submit hote hi button ko disable karein
+
+    try {
+      const response = await fetch("https://formspree.io/f/meopbzzo", { // Aapka Formspree URL
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast.success("Thank you! We'll get back to you within 24 hours.");
+        setFormData({ name: "", email: "", phone: "", service: "", message: "" });
+      } else {
+        toast.error("Oops! Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Network error. Please check your connection.");
+    } finally {
+      setIsSubmitting(false); // Response aane ke baad button ko enable karein
+    }
   };
 
   return (
@@ -141,8 +162,14 @@ const Contact = () => {
                   className="bg-background resize-none"
                 />
               </div>
-              <Button type="submit" variant="hero" size="lg" className="w-full">
-                Start Your Free Trial
+              <Button 
+                type="submit" 
+                variant="hero" 
+                size="lg" 
+                className="w-full"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Start Your Free Trial"}
               </Button>
               <p className="text-xs text-muted-foreground text-center">
                 By submitting, you agree to our Terms & Conditions
