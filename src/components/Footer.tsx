@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Facebook, Instagram, Linkedin, Youtube, MessageCircle } from "lucide-react";
+// Linkedin ko yahan se hata diya gaya hai
+import { Facebook, Instagram, Youtube, MessageCircle } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -84,31 +85,34 @@ const Footer = () => {
             </ul>
             <div className="flex gap-3">
               <a
-                href="#"
+                href="#" // <-- Facebook link (aap yahan apna link daal sakte hain)
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
               >
                 <Facebook className="w-5 h-5 text-primary hover:text-primary-foreground" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/apnagrowthmedia/?utm_source=ig_web_button_share_sheet" // <-- Instagram link update
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
               >
                 <Instagram className="w-5 h-5 text-primary hover:text-primary-foreground" />
               </a>
+              {/* LinkedIn icon yahan se hata diya gaya hai */}
               <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
-              >
-                <Linkedin className="w-5 h-5 text-primary hover:text-primary-foreground" />
-              </a>
-              <a
-                href="#"
+                href="https://www.youtube.com/@ApnaGrowthMedia" // <-- YouTube link update
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
               >
                 <Youtube className="w-5 h-5 text-primary hover:text-primary-foreground" />
               </a>
               <a
-                href="https://wa.me/919877830757"
+                href="https://wa.me/919877830757" // <-- WhatsApp link (sahi hai)
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
               >
                 <MessageCircle className="w-5 h-5 text-primary hover:text-primary-foreground" />
