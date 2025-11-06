@@ -23,5 +23,48 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
     <script src="//code.tidio.co/9l6nxscodahzbianowjc7ehdwz8kpivn.js" async></script>
+    <style>
+      /* Position Tidio as sidebar on left - works on both desktop and mobile */
+      #tidio-chat-iframe,
+      #tidio-chat-code iframe,
+      div[id^="tidio"] iframe,
+      #tidio-chat,
+      div[id^="tidio-chat"],
+      .tidio-button-wrapper,
+      .tidio-1wqvf2r {
+        left: 0 !important;
+        right: auto !important;
+      }
+      
+      /* Sidebar positioning for chat window */
+      #tidio-chat-iframe {
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 380px !important;
+        height: 100vh !important;
+        top: 0 !important;
+        bottom: 0 !important;
+      }
+      
+      /* Mobile responsive */
+      @media (max-width: 768px) {
+        #tidio-chat-iframe {
+          max-width: 100% !important;
+        }
+      }
+    </style>
+    <script>
+      // Auto-open Tidio chat with a greeting when page loads
+      document.addEventListener('tidioChat-ready', function() {
+        setTimeout(function() {
+          if (window.tidioChatApi) {
+            window.tidioChatApi.open();
+            setTimeout(function() {
+              window.tidioChatApi.close();
+            }, 3000);
+          }
+        }, 2000);
+      });
+    </script>
   </body>
 </html>
