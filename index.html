@@ -34,6 +34,7 @@
       .tidio-1wqvf2r {
         left: 0 !important;
         right: auto !important;
+        z-index: 40 !important;
       }
       
       /* Sidebar positioning for chat window */
@@ -52,19 +53,18 @@
           max-width: 100% !important;
         }
       }
+      
+      /* Wave animation for Tidio button */
+      @keyframes tidio-wave {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(15deg); }
+        75% { transform: rotate(-15deg); }
+      }
+      
+      .tidio-button-wrapper,
+      .tidio-1wqvf2r {
+        animation: tidio-wave 2s ease-in-out infinite !important;
+      }
     </style>
-    <script>
-      // Auto-open Tidio chat with a greeting when page loads
-      document.addEventListener('tidioChat-ready', function() {
-        setTimeout(function() {
-          if (window.tidioChatApi) {
-            window.tidioChatApi.open();
-            setTimeout(function() {
-              window.tidioChatApi.close();
-            }, 3000);
-          }
-        }, 2000);
-      });
-    </script>
   </body>
 </html>

@@ -25,7 +25,7 @@ const Header = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-background/98 backdrop-blur-lg shadow-lg" : "bg-background/90 backdrop-blur-md"
+        isScrolled ? "bg-background/95 backdrop-blur-lg shadow-lg" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -50,7 +50,7 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Button variant="glow" size="lg" asChild>
+            <Button variant="glow" size="lg" className="rotating-border-glow animate-glow-pulse hover:scale-105 transition-all duration-300 hover:shadow-2xl" asChild>
               <a href="#contact">Get Free Consultation</a>
             </Button>
           </div>
@@ -78,7 +78,7 @@ const Header = () => {
                   {item.name}
                 </a>
               ))}
-              <Button variant="glow" size="lg" className="w-full" asChild>
+              <Button variant="glow" size="lg" className="w-full rotating-border-glow animate-glow-pulse hover:scale-105 transition-all duration-300" asChild>
                 <a href="#contact">Get Free Consultation</a>
               </Button>
             </nav>
