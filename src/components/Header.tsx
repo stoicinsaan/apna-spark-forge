@@ -50,7 +50,7 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Button variant="glow" size="lg" className="rotating-border-glow animate-glow-pulse hover:scale-105 transition-all duration-300 hover:shadow-2xl" asChild>
+            <Button variant="glow" size="lg" asChild>
               <a href="#contact">Get Free Consultation</a>
             </Button>
           </div>
@@ -78,7 +78,7 @@ const Header = () => {
                   {item.name}
                 </a>
               ))}
-              <Button variant="glow" size="lg" className="w-full rotating-border-glow animate-glow-pulse hover:scale-105 transition-all duration-300" asChild>
+              <Button variant="glow" size="lg" className="w-full" asChild>
                 <a href="#contact">Get Free Consultation</a>
               </Button>
             </nav>
