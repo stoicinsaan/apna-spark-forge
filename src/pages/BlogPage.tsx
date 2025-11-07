@@ -64,4 +64,17 @@ const BlogPage = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                  <p className="text-sm text-
+                  <p className="text-sm text-muted-foreground">{post.excerpt}</p>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </main>
+      <Footer />
+      <FloatingCTA />
+    </div>
+  );
+};
+
+export default BlogPage;
