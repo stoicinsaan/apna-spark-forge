@@ -1,7 +1,7 @@
 import { createClient } from "@sanity/client";
 
 export default createClient({
-  projectId: "geo27mp6", // Your Project ID
+  projectId: "qd2nvb50", // <-- YOUR NEW ID
   dataset: "production",   // Your dataset
   useCdn: true,            // Uses cached data for speed
   apiVersion: "2024-07-15", // Use a current date
