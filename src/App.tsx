@@ -8,6 +8,9 @@ import NotFound from "./pages/NotFound";
 import BlogPage from "./pages/BlogPage"; // Import new page
 import BlogPostPage from "./pages/BlogPostPage"; // Import new page
 
+// 👇 1. 'ScrollToTop' कंपोनेंट को यहाँ इम्पोर्ट करें
+import ScrollToTop from "./components/ScrollToTop"; 
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -16,6 +19,8 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        {/* 👇 2. <ScrollToTop /> को <BrowserRouter> के ठीक अंदर रखें */}
+        <ScrollToTop /> 
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/blog" element={<BlogPage />} /> {/* Add new route */}
