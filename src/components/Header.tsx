@@ -142,7 +142,8 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden pb-6 animate-fade-in-up">
+          // --- FIX: Added 'bg-background' here to give the mobile menu a solid background ---
+          <div className="md:hidden pb-6 animate-fade-in-up bg-background">
             <nav className="flex flex-col space-y-4">
               {navItems.map(renderMobileNavItem)}
               <Button variant="glow" size="lg" className="w-full" asChild>
