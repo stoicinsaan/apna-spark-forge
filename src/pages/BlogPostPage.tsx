@@ -6,43 +6,51 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, User, ArrowLeft } from "lucide-react";
 import FloatingCTA from "@/components/FloatingCTA";
 import { Button } from "@/components/ui/button";
-import sanityClient from "@/lib/sanityClient";
-import { urlFor } from "@/lib/utils";
-import { PortableText } from "@portabletext/react"; // To render rich text
-import { Skeleton } from "@/components/ui/skeleton"; // For loading state
+import sanityClient, { urlFor } from "@/lib/sanityClient"; // ✅ Correct import
+import { PortableText } from "@portabletext/react"; // ✅ For rendering rich text
+import { Skeleton } from "@/components/ui/skeleton"; // ✅ For loading state
 
+// ✅ TypeScript type for a single post
 interface Post {
   title: string;
-  date: string;
-  author: string;
-  category: string;
-  imageUrl: string;
-  content: any[]; // Portable Text content is an array
+  publishedAt: string;
+  author?: string;
+  category?: string;
+  imageUrl?: any;
+  content: any[];
 }
 
-// This component tells PortableText how to style your text
+// ✅ PortableText custom renderers (for styled blocks)
 const ptComponents = {
   types: {
     image: ({ value }: { value: any }) => (
       <img
         src={urlFor(value).url()}
-        alt={value.alt || 'Blog post image'}
+        alt={value.alt || "Blog post image"}
         className="rounded-lg my-8"
       />
     ),
   },
   block: {
     h2: ({ children }: { children: React.ReactNode }) => (
-      <h2 className="text-3xl font-bold mt-12 mb-4 gradient-text">{children}</h2>
+      <h2 className="text-3xl font-bold mt-12 mb-4 gradient-text">
+        {children}
+      </h2>
     ),
     h3: ({ children }: { children: React.ReactNode }) => (
-      <h3 className="text-2xl font-bold mt-10 mb-4 gradient-text">{children}</h3>
+      <h3 className="text-2xl font-bold mt-10 mb-4 gradient-text">
+        {children}
+      </h3>
     ),
     normal: ({ children }: { children: React.ReactNode }) => (
-      <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{children}</p>
+      <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+        {children}
+      </p>
     ),
     ul: ({ children }: { children: React.ReactNode }) => (
-      <ul className="list-disc list-inside space-y-3 text-lg text-muted-foreground mb-8 pl-4">{children}</ul>
+      <ul className="list-disc list-inside space-y-3 text-lg text-muted-foreground mb-8 pl-4">
+        {children}
+      </ul>
     ),
     li: ({ children }: { children: React.ReactNode }) => (
       <li className="text-lg text-muted-foreground">{children}</li>
@@ -58,25 +66,29 @@ const BlogPostPage = () => {
   useEffect(() => {
     if (!slug) return;
 
-    // This query fetches one post that matches the slug
+    // ✅ Correct GROQ query for single post
     const query = `*[_type == "post" && slug.current == $slug][0] {
       title,
-      "date": publishedAt,
+      publishedAt,
       "author": author->name,
       "category": category->title,
       "imageUrl": mainImage,
       "content": body
     }`;
 
-    sanityClient.fetch(query, { slug })
+    sanityClient
+      .fetch(query, { slug })
       .then((data) => {
         setPost(data);
         setIsLoading(false);
       })
-      .catch(console.error);
+      .catch((err) => {
+        console.error("Sanity fetch error:", err);
+        setIsLoading(false);
+      });
   }, [slug]);
 
-  // Helper to format the date
+  // ✅ Helper for date format
   const formatDate = (dateString: string) => {
     if (!dateString) return "Date not set";
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -86,6 +98,7 @@ const BlogPostPage = () => {
     });
   };
 
+  // ✅ Loading skeleton UI
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background text-foreground">
@@ -106,36 +119,50 @@ const BlogPostPage = () => {
     );
   }
 
+  // ✅ If post not found
   if (!post) {
     return (
-        <div className="min-h-screen bg-background text-foreground">
-          <Header />
-          <main className="container mx-auto px-4 py-32 max-w-4xl text-center">
-            <h1 className="text-4xl font-bold mb-4">Post not found</h1>
-            <p className="text-lg text-muted-foreground mb-8">This post might be deleted or the link is incorrect.</p>
-            <Link to="/blog" className="inline-flex items-center text-primary hover:underline">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Blog
-            </Link>
-          </main>
-          <Footer />
-          <FloatingCTA />
-        </div>
+      <div className="min-h-screen bg-background text-foreground">
+        <Header />
+        <main className="container mx-auto px-4 py-32 max-w-4xl text-center">
+          <h1 className="text-4xl font-bold mb-4">Post not found</h1>
+          <p className="text-lg text-muted-foreground mb-8">
+            This post might be deleted or the link is incorrect.
+          </p>
+          <Link
+            to="/blog"
+            className="inline-flex items-center text-primary hover:underline"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Blog
+          </Link>
+        </main>
+        <Footer />
+        <FloatingCTA />
+      </div>
     );
   }
 
+  // ✅ Render the post
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="container mx-auto px-4 py-32 max-w-4xl">
         <article className="animate-fade-in">
-          <Link to="/blog" className="mb-8 inline-flex items-center text-primary hover:underline">
+          <Link
+            to="/blog"
+            className="mb-8 inline-flex items-center text-primary hover:underline"
+          >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Blog
           </Link>
 
+          {/* Header section */}
           <header className="mb-12">
-            <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 mb-4">
+            <Badge
+              variant="secondary"
+              className="bg-primary/10 text-primary border-primary/30 mb-4"
+            >
               {post.category || "General"}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
@@ -144,7 +171,7 @@ const BlogPostPage = () => {
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <span>{formatDate(post.date)}</span>
+                <span>{formatDate(post.publishedAt)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
@@ -153,28 +180,33 @@ const BlogPostPage = () => {
             </div>
           </header>
 
+          {/* Feature image */}
           <img
-            src={post.imageUrl ? urlFor(post.imageUrl).width(1200).height(600).url() : "https://via.placeholder.com/1200x600.png?text=No+Image"}
+            src={
+              post.imageUrl
+                ? urlFor(post.imageUrl).width(1200).height(600).url()
+                : "https://via.placeholder.com/1200x600.png?text=No+Image"
+            }
             alt={post.title}
             className="w-full h-auto max-h-[500px] object-cover rounded-2xl mb-12 shadow-lg"
           />
 
-          {/* Render Rich Text Content */}
+          {/* Rich text body */}
           <div className="prose prose-invert prose-lg max-w-none prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground prose-headings:gradient-text">
             <PortableText value={post.content} components={ptComponents} />
           </div>
 
+          {/* CTA footer */}
           <div className="text-center mt-16 py-12 border-t border-border">
             <h3 className="text-3xl font-bold mb-4">
-              Ready to <span className="gradient-text">Grow</span> Your Business?
+              Ready to <span className="gradient-text">Grow</span> Your
+              Business?
             </h3>
             <p className="text-muted-foreground text-lg mb-8 max-w-xl mx-auto">
               Start your 7-day free trial today. No credit card required.
             </p>
             <Button variant="hero" size="lg" asChild>
-              <a href="/#contact">
-                Start Your Free Trial
-              </a>
+              <a href="/#contact">Start Your Free Trial</a>
             </Button>
           </div>
         </article>
