@@ -1,8 +1,8 @@
 import { createClient } from "@sanity/client";
 
 export default createClient({
-  projectId: "qd2nvb50", // <-- YOUR NEW ID
-  dataset: "production",   // Your dataset
-  useCdn: true,            // Uses cached data for speed
-  apiVersion: "2024-07-15", // Use a current date
+  projectId: "o0ousbqs", // <-- Yeh aapki NAYI ID hai
+  dataset: "production",   // Aapka dataset
+  useCdn: true,            // Speed ke liye cached data
+  apiVersion: "2024-07-15", // Aaj ki date
 });
