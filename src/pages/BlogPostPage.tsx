@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useParams, Link } from "react-router-dom";
@@ -5,63 +6,137 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar, User, ArrowLeft } from "lucide-react";
 import FloatingCTA from "@/components/FloatingCTA";
 import { Button } from "@/components/ui/button";
+import sanityClient from "@/lib/sanityClient";
+import { urlFor } from "@/lib/utils";
+import { PortableText } from "@portabletext/react"; // To render rich text
+import { Skeleton } from "@/components/ui/skeleton"; // For loading state
 
-// This is also mock data. The real data will be fetched from your CMS based on the "slug".
-const mockPostContent = {
-  title: "Why a 7-Day Free Trial is Essential in Digital Marketing",
-  date: "November 7, 2025",
-  author: "Apna Growth Media",
-  category: "Digital Marketing",
-  imageUrl: "https://via.placeholder.com/1200x600.png?text=Blog+Header+Image",
-  content: `
-    <p class="text-lg text-muted-foreground mb-6 leading-relaxed">
-      In the world of digital marketing, building trust is one of the hardest tasks. 
-      Every agency makes big promises, but who actually delivers? This is why we introduced the '7-Day Free Trial'. 
-      It's not just an offer; it's our confidence.
-    </p>
+interface Post {
+  title: string;
+  date: string;
+  author: string;
+  category: string;
+  imageUrl: string;
+  content: any[]; // Portable Text content is an array
+}
 
-    <h2 class="text-3xl font-bold mt-12 mb-4 gradient-text">A Risk-Free Start</h2>
-    <p class="text-lg text-muted-foreground mb-6 leading-relaxed">
-      With our 7-day trial, you get to try our services without any credit card information. 
-      You see how our team works, what our strategies are, and what we can do for your business.
-    </p>
-
-    <ul class="list-disc list-inside space-y-3 text-lg text-muted-foreground mb-8 pl-4">
-      <li><strong>Transparency:</strong> You see exactly what we're doing for you.</li>
-      <li><strong>No Commitment:</strong> If you're not happy, you can walk away after 7 days, no questions asked.</li>
-      <li><strong>Real Results:</strong> We don't just talk; we show you what growth looks like in 7 days.</li>
-    </ul>
-
-    <h2 class="text-3xl font-bold mt-12 mb-4 gradient-text">How Does It Work?</h2>
-    <p class="text-lg text-muted-foreground mb-6 leading-relaxed">
-      Signing up is easy. Just <a href="/#contact" class="text-primary hover:underline">contact us</a>, 
-      we'll discuss your goals, and we'll start your 7-day free trial.
-    </p>
-  `
+// This component tells PortableText how to style your text
+const ptComponents = {
+  types: {
+    image: ({ value }: { value: any }) => (
+      <img
+        src={urlFor(value).url()}
+        alt={value.alt || 'Blog post image'}
+        className="rounded-lg my-8"
+      />
+    ),
+  },
+  block: {
+    h2: ({ children }: { children: React.ReactNode }) => (
+      <h2 className="text-3xl font-bold mt-12 mb-4 gradient-text">{children}</h2>
+    ),
+    h3: ({ children }: { children: React.ReactNode }) => (
+      <h3 className="text-2xl font-bold mt-10 mb-4 gradient-text">{children}</h3>
+    ),
+    normal: ({ children }: { children: React.ReactNode }) => (
+      <p className="text-lg text-muted-foreground mb-6 leading-relaxed">{children}</p>
+    ),
+    ul: ({ children }: { children: React.ReactNode }) => (
+      <ul className="list-disc list-inside space-y-3 text-lg text-muted-foreground mb-8 pl-4">{children}</ul>
+    ),
+    li: ({ children }: { children: React.ReactNode }) => (
+      <li className="text-lg text-muted-foreground">{children}</li>
+    ),
+  },
 };
 
 const BlogPostPage = () => {
   const { slug } = useParams();
+  const [post, setPost] = useState<Post | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // You would use the 'slug' to fetch data from your CMS here
-  // For now, we are just using the mock data
-  const post = mockPostContent; 
+  useEffect(() => {
+    if (!slug) return;
+
+    // This query fetches one post that matches the slug
+    const query = `*[_type == "post" && slug.current == $slug][0] {
+      title,
+      "date": publishedAt,
+      "author": author->name,
+      "category": category->title,
+      "imageUrl": mainImage,
+      "content": body
+    }`;
+
+    sanityClient.fetch(query, { slug })
+      .then((data) => {
+        setPost(data);
+        setIsLoading(false);
+      })
+      .catch(console.error);
+  }, [slug]);
+
+  // Helper to format the date
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "Date not set";
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground">
+        <Header />
+        <main className="container mx-auto px-4 py-32 max-w-4xl">
+          <Skeleton className="h-6 w-1/4 mb-8" />
+          <Skeleton className="h-10 w-3/4 mb-4" />
+          <Skeleton className="h-10 w-1/2 mb-6" />
+          <Skeleton className="h-6 w-1/3 mb-12" />
+          <Skeleton className="w-full h-96 rounded-2xl mb-12" />
+          <Skeleton className="h-6 w-full mb-4" />
+          <Skeleton className="h-6 w-full mb-4" />
+          <Skeleton className="h-6 w-5/6" />
+        </main>
+        <Footer />
+        <FloatingCTA />
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+        <div className="min-h-screen bg-background text-foreground">
+          <Header />
+          <main className="container mx-auto px-4 py-32 max-w-4xl text-center">
+            <h1 className="text-4xl font-bold mb-4">Post not found</h1>
+            <p className="text-lg text-muted-foreground mb-8">This post might be deleted or the link is incorrect.</p>
+            <Link to="/blog" className="inline-flex items-center text-primary hover:underline">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Blog
+            </Link>
+          </main>
+          <Footer />
+          <FloatingCTA />
+        </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <main className="container mx-auto px-4 py-32 max-w-4xl">
         <article className="animate-fade-in">
-          {/* Back Button */}
           <Link to="/blog" className="mb-8 inline-flex items-center text-primary hover:underline">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Blog
           </Link>
 
-          {/* Post Header */}
           <header className="mb-12">
             <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 mb-4">
-              {post.category}
+              {post.category || "General"}
             </Badge>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
               {post.title}
@@ -69,34 +144,26 @@ const BlogPostPage = () => {
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
-                <span>{post.date}</span>
+                <span>{formatDate(post.date)}</span>
               </div>
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4" />
-                <span>{post.author}</span>
+                <span>{post.author || "Apna Growth Media"}</span>
               </div>
             </div>
           </header>
 
-          {/* Post Image */}
           <img
-            src={post.imageUrl}
+            src={post.imageUrl ? urlFor(post.imageUrl).width(1200).height(600).url() : "https://via.placeholder.com/1200x600.png?text=No+Image"}
             alt={post.title}
             className="w-full h-auto max-h-[500px] object-cover rounded-2xl mb-12 shadow-lg"
           />
 
-          {/* Post Content (Read-only) */}
-          {/* When you get data from a CMS, 'content' will be an HTML string.
-              'dangerouslySetInnerHTML' is used to render it.
-          */}
-          <div
-            className="prose prose-invert prose-lg max-w-none prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground prose-headings:gradient-text"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          {/* Render Rich Text Content */}
+          <div className="prose prose-invert prose-lg max-w-none prose-p:text-muted-foreground prose-a:text-primary prose-strong:text-foreground prose-headings:gradient-text">
+            <PortableText value={post.content} components={ptComponents} />
+          </div>
 
-          {/* No Comment Section as requested */}
-
-          {/* CTA Button */}
           <div className="text-center mt-16 py-12 border-t border-border">
             <h3 className="text-3xl font-bold mb-4">
               Ready to <span className="gradient-text">Grow</span> Your Business?
