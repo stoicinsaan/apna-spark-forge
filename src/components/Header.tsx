@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom"; // Import Link
+import { Link, useLocation } from "react-router-dom"; // Import Link and useLocation
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation(); // Get current page location
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,33 +20,87 @@ const Header = () => {
     { name: "Home", href: "/#home" },
     { name: "Services", href: "/#services" },
     { name: "Packages", href: "/#packages" },
-    { name: "Blog", href: "/blog" }, // New Blog Link
+    { name: "Blog", href: "/blog" }, // This is the page link
     { name: "About Us", href: "/#about" },
     { name: "Contact", href: "/#contact" },
   ];
 
-  // Helper function to handle navigation
-  const handleNavClick = (href: string) => {
+  // This function now only handles smooth scrolling on the home page
+  const handleSmoothScroll = (href: string) => {
     setIsMobileMenuOpen(false);
-    // If it's a new page route like /blog
-    if (href.startsWith('/blog')) {
-      window.location.href = href; // Use standard navigation
-    } else {
-      // For smooth scroll hash links
-      const targetId = href.split("#")[1];
-      if (targetId) {
-        const targetElement = document.getElementById(targetId);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.location.href = href; // Fallback
-        }
-      } else {
-         window.location.href = href;
-      }
+    const targetId = href.split("#")[1];
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: "smooth" });
     }
   };
 
+  const renderNavItem = (item: { name: string, href: string }, isMobile: boolean = false) => {
+    const isHomePage = location.pathname === '/';
+    const isBlogLink = item.href.startsWith('/blog');
+    const isHashLink = item.href.startsWith('/#');
+
+    const mobileClasses = "text-foreground hover:text-primary transition-colors duration-300 font-medium py-2";
+    const desktopClasses = "text-foreground hover:text-primary transition-colors duration-300 font-medium";
+
+    if (isBlogLink) {
+      // Use <Link> for internal SPA routes
+      return (
+        <Link
+          key={item.name}
+          to={item.href}
+          className={isMobile ? mobileClasses : desktopClasses}
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          {item.name}
+        </Link>
+      );
+    }
+
+    if (isHashLink) {
+      // If we are on the home page, use smooth scroll
+      if (isHomePage) {
+        return (
+          <a
+            key={item.name}
+            href={item.href}
+            className={isMobile ? mobileClasses : desktopClasses}
+            onClick={(e) => {
+              e.preventDefault();
+              handleSmoothScroll(item.href);
+            }}
+          >
+            {item.name}
+          </a>
+        );
+      } else {
+        // If we are on another page (like /blog), use a normal <a> tag
+        // to force navigation back to the home page.
+        return (
+          <a
+            key={item.name}
+            href={item.href}
+            className={isMobile ? mobileClasses : desktopClasses}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {item.name}
+          </a>
+        );
+      }
+    }
+
+    // Fallback for other links (if any)
+    return (
+      <a
+        key={item.name}
+        href={item.href}
+        className={isMobile ? mobileClasses : desktopClasses}
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        {item.name}
+      </a>
+    );
+  };
 
   return (
     <header
@@ -57,27 +112,14 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold gradient-text">Apna Growth Media</Link>
+            <Link to="/" className="text-2xl font-bold gradient-text" onClick={() => handleSmoothScroll('/#home')}>
+              Apna Growth Media
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-               <a
-                key={item.name}
-                href={item.href}
-                onClick={(e) => {
-                  // Prevent default for hash links and blog link to use our handler
-                  if (item.href.startsWith('/#') || item.href === '/blog') {
-                    e.preventDefault();
-                    handleNavClick(item.href);
-                  }
-                }}
-                className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
-              >
-                {item.name}
-              </a>
-            ))}
+            {navItems.map((item) => renderNavItem(item, false))}
           </nav>
 
           {/* CTA Button */}
@@ -100,21 +142,7 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div className="md:hidden pb-6 animate-fade-in-up">
             <nav className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-foreground hover:text-primary transition-colors duration-300 font-medium py-2"
-                   onClick={(e) => {
-                    if (item.href.startsWith('/#') || item.href === '/blog') {
-                      e.preventDefault();
-                      handleNavClick(item.href);
-                    }
-                  }}
-                >
-                  {item.name}
-                </a>
-              ))}
+              {navItems.map((item) => renderNavItem(item, true))}
               <Button variant="glow" size="lg" className="w-full" asChild>
                 <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Get Free Consultation</a>
               </Button>
