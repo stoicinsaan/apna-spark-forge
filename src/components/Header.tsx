@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom"; // Import Link
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,12 +16,36 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "Services", href: "#services" },
-    { name: "Packages", href: "#packages" },
-    { name: "About Us", href: "#about" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "/#home" },
+    { name: "Services", href: "/#services" },
+    { name: "Packages", href: "/#packages" },
+    { name: "Blog", href: "/blog" }, // New Blog Link
+    { name: "About Us", href: "/#about" },
+    { name: "Contact", href: "/#contact" },
   ];
+
+  // Helper function to handle navigation
+  const handleNavClick = (href: string) => {
+    setIsMobileMenuOpen(false);
+    // If it's a new page route like /blog
+    if (href.startsWith('/blog')) {
+      window.location.href = href; // Use standard navigation
+    } else {
+      // For smooth scroll hash links
+      const targetId = href.split("#")[1];
+      if (targetId) {
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: "smooth" });
+        } else {
+          window.location.href = href; // Fallback
+        }
+      } else {
+         window.location.href = href;
+      }
+    }
+  };
+
 
   return (
     <header
@@ -32,15 +57,22 @@ const Header = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold gradient-text">Apna Growth Media</h1>
+            <Link to="/" className="text-2xl font-bold gradient-text">Apna Growth Media</Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <a
+               <a
                 key={item.name}
                 href={item.href}
+                onClick={(e) => {
+                  // Prevent default for hash links and blog link to use our handler
+                  if (item.href.startsWith('/#') || item.href === '/blog') {
+                    e.preventDefault();
+                    handleNavClick(item.href);
+                  }
+                }}
                 className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
               >
                 {item.name}
@@ -73,13 +105,18 @@ const Header = () => {
                   key={item.name}
                   href={item.href}
                   className="text-foreground hover:text-primary transition-colors duration-300 font-medium py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                   onClick={(e) => {
+                    if (item.href.startsWith('/#') || item.href === '/blog') {
+                      e.preventDefault();
+                      handleNavClick(item.href);
+                    }
+                  }}
                 >
                   {item.name}
                 </a>
               ))}
               <Button variant="glow" size="lg" className="w-full" asChild>
-                <a href="#contact">Get Free Consultation</a>
+                <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>Get Free Consultation</a>
               </Button>
             </nav>
           </div>
