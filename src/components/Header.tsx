@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { Link } from "react-router-dom"; // Import Link
+import { Link, useLocation } from "react-router-dom"; // Import Link and useLocation
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation(); // Get current page location
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,8 +27,10 @@ const Header = () => {
 
   // This function now only handles smooth scrolling
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    setIsMobileMenuOpen(false); // Close menu on click
+
     // Check if we are on the homepage
-    if (window.location.pathname === '/') {
+    if (location.pathname === '/') {
       e.preventDefault(); // Stop default anchor behavior
       const targetId = href.split("#")[1];
       const targetElement = document.getElementById(targetId);
@@ -35,13 +38,13 @@ const Header = () => {
         targetElement.scrollIntoView({ behavior: "smooth" });
       }
     }
-    // If on another page (like /blog), the default 'a' tag behavior will
-    // navigate back to the homepage and then to the hash. This is fine.
-    setIsMobileMenuOpen(false); // Close menu on click
+    // If on another page (like /blog), let the 'a' tag work normally.
+    // It will navigate to the home page and then jump to the hash.
   };
 
+  // --- Helper for Desktop Nav ---
   const renderNavItem = (item: { name: string, href: string }) => {
-    const isBlogLink = item.href.startsWith('/blog');
+    const isBlogLink = item.href === '/blog'; // Check for blog link
 
     if (isBlogLink) {
       // Use <Link> for internal SPA routes
@@ -57,7 +60,7 @@ const Header = () => {
       );
     }
 
-    // Use <a> for all other links (including hash links)
+    // Use <a> for all hash links (/#...)
     return (
       <a
         key={item.name}
@@ -70,8 +73,9 @@ const Header = () => {
     );
   };
 
+  // --- Helper for Mobile Nav ---
   const renderMobileNavItem = (item: { name: string, href: string }) => {
-    const isBlogLink = item.href.startsWith('/blog');
+    const isBlogLink = item.href === '/blog'; // Check for blog link
 
     if (isBlogLink) {
       // Use <Link> for internal SPA routes
@@ -87,7 +91,7 @@ const Header = () => {
       );
     }
 
-    // Use <a> for all other links (including hash links)
+    // Use <a> for all hash links (/#...)
     return (
       <a
         key={item.name}
