@@ -8,18 +8,21 @@ import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import FloatingCTA from "@/components/FloatingCTA";
+// Blog pages are not imported here, App.tsx handles them
 
 const Index = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      <Hero />
-      <Services />
-      <VideoProduction />
-      <Packages />
-      <Testimonials />
-      <AboutUs />
-      <Contact />
+      <main> {/* Wrap sections in main tag */}
+        <Hero />
+        <Services />
+        <VideoProduction />
+        <Packages />
+        <Testimonials />
+        <AboutUs />
+        <Contact />
+      </main> {/* End main tag */}
       <Footer />
       <FloatingCTA />
     </div>
