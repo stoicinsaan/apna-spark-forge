@@ -61,6 +61,8 @@
     "vaul": "^0.9.9",
     "zod": "^3.25.76"
     "@sanity/client": "^6.21.3"
+    "@portabletext/react": "^3.1.0",
+"@sanity/image-url": "^1.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
