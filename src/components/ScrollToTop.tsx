@@ -1,17 +1,21 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
+/**
+ * This component scrolls the window to the top every time the page changes.
+ * It should be placed inside <BrowserRouter> but outside <Routes>.
+ */
 const ScrollToTop = () => {
-  // useLocation हुक से वर्तमान path को प्राप्त करें
+  // The useLocation() hook gets the current URL's pathname (e.g., /blog/my-post)
   const { pathname } = useLocation();
 
-  // जब भी pathname बदले (यानी पेज बदले), यह इफ़ेक्ट चलेगा
+  // The useEffect hook runs when the [pathname] changes
   useEffect(() => {
-    // विंडो को टॉप पर (0, 0) स्क्रॉल करें
+    // Scroll the window immediately to the top (0, 0)
     window.scrollTo(0, 0);
-  }, [pathname]); // इफ़ेक्ट का dependency array
+  }, [pathname]); // This effect will only run when 'pathname' changes
 
-  // यह कंपोनेंट कुछ भी रेंडर नहीं करता है
+  // This component doesn't render anything to the screen, so return null
   return null;
 };
 
