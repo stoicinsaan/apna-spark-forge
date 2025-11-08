@@ -1,6 +1,10 @@
+// Filename: src/components/Footer.tsx
 import { Button } from "@/components/ui/button";
-// Linkedin ko yahan se hata diya gaya hai
 import { Facebook, Instagram, Youtube, MessageCircle } from "lucide-react";
+
+// --- 1. Import 'Link' from react-router-dom ---
+// This is needed to navigate to the /privacy-policy page
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -74,18 +78,35 @@ const Footer = () => {
           {/* Column 4 - Legal & Social */}
           <div>
             <h4 className="font-semibold text-lg mb-4">Legal & Connect</h4>
+            
+            {/* --- 2. CHANGE: Updated this section --- */}
+            {/* Replaced the .map() array with a hardcoded list
+                so we can use <Link> for Privacy Policy
+            */}
             <ul className="space-y-2 text-sm mb-6">
-              {["Privacy Policy", "Terms & Conditions", "Refund & 7-Day Trial Policy"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                    {link}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <Link
+                  to="/privacy-policy"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  Terms & Conditions
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  Refund & 7-Day Trial Policy
+                </a>
+              </li>
             </ul>
+            
             <div className="flex gap-3">
               <a
-                href="#" // <-- Facebook link (aap yahan apna link daal sakte hain)
+                href="#" // <-- Facebook link
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
@@ -93,16 +114,15 @@ const Footer = () => {
                 <Facebook className="w-5 h-5 text-primary hover:text-primary-foreground" />
               </a>
               <a
-                href="https://www.instagram.com/apnagrowthmedia/?utm_source=ig_web_button_share_sheet" // <-- Instagram link update
+                href="https://www.instagram.com/apnagrowthmedia/?utm_source=ig_web_button_share_sheet" // <-- Instagram link
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
               >
                 <Instagram className="w-5 h-5 text-primary hover:text-primary-foreground" />
               </a>
-              {/* LinkedIn icon yahan se hata diya gaya hai */}
               <a
-                href="https://www.youtube.com/@ApnaGrowthMedia" // <-- YouTube link update
+                href="https://www.youtube.com/@ApnaGrowthMedia" // <-- YouTube link
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
@@ -110,7 +130,7 @@ const Footer = () => {
                 <Youtube className="w-5 h-5 text-primary hover:text-primary-foreground" />
               </a>
               <a
-                href="https://wa.me/919877830757" // <-- WhatsApp link (sahi hai)
+                href="https://wa.me/919877830757" // <-- WhatsApp link
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center hover:bg-primary hover:scale-110 transition-all duration-300"
