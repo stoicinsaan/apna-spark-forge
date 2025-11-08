@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react"; // 'X' is no longer needed here, Sheet handles it
+import { Home, Briefcase, Package, BookOpen, Users, Phone } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
-} from "@/components/ui/sheet"; // --- IMPORTS ADDED ---
+} from "@/components/ui/sheet";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -22,12 +22,12 @@ const Header = () => {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "/#home" },
-    { name: "Services", href: "/#services" },
-    { name: "Packages", href: "/#packages" },
-    { name: "Blog", href: "/blog" },
-    { name: "About Us", href: "/#about" },
-    { name: "Contact", href: "/#contact" },
+    { name: "Home", href: "/#home", icon: Home },
+    { name: "Services", href: "/#services", icon: Briefcase },
+    { name: "Packages", href: "/#packages", icon: Package },
+    { name: "Blog", href: "/blog", icon: BookOpen },
+    { name: "About Us", href: "/#about", icon: Users },
+    { name: "Contact", href: "/#contact", icon: Phone },
   ];
 
   const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -46,15 +46,18 @@ const Header = () => {
   };
 
   // --- Helper for Desktop Nav ---
-  const renderNavItem = (item: { name: string, href: string }) => {
+  const renderNavItem = (item: { name: string, href: string, icon: any }) => {
     const isBlogLink = item.href === '/blog';
+    const isActive = isBlogLink ? location.pathname === '/blog' : location.pathname === '/' && location.hash === item.href.split('#')[1];
 
     if (isBlogLink) {
       return (
         <Link
           key={item.name}
           to={item.href}
-          className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
+          className={`text-foreground hover:text-primary transition-all duration-300 font-medium relative pb-1 ${
+            isActive ? 'text-primary after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary after:shadow-glow' : ''
+          }`}
           onClick={() => setIsMobileMenuOpen(false)}
         >
           {item.name}
@@ -66,7 +69,9 @@ const Header = () => {
       <a
         key={item.name}
         href={item.href}
-        className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
+        className={`text-foreground hover:text-primary transition-all duration-300 font-medium relative pb-1 ${
+          isActive ? 'text-primary after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-primary after:shadow-glow' : ''
+        }`}
         onClick={(e) => handleSmoothScroll(e, item.href)}
       >
         {item.name}
@@ -75,17 +80,22 @@ const Header = () => {
   };
 
   // --- Helper for Mobile Nav (links inside the Sheet) ---
-  const renderMobileNavItem = (item: { name: string, href: string }) => {
+  const renderMobileNavItem = (item: { name: string, href: string, icon: any }) => {
     const isBlogLink = item.href === '/blog';
+    const isActive = isBlogLink ? location.pathname === '/blog' : location.pathname === '/' && location.hash === item.href.split('#')[1];
+    const Icon = item.icon;
 
     if (isBlogLink) {
       return (
         <Link
           key={item.name}
           to={item.href}
-          className="text-foreground hover:text-primary transition-colors duration-300 font-medium py-2 text-lg" // Made text larger
-          onClick={() => setIsMobileMenuOpen(false)} // Close menu on click
+          className={`flex items-center gap-3 text-foreground hover:text-primary transition-all duration-300 font-medium py-3 text-lg border-b border-border/30 ${
+            isActive ? 'text-primary border-b-2 border-primary' : ''
+          }`}
+          onClick={() => setIsMobileMenuOpen(false)}
         >
+          <Icon className="w-5 h-5" />
           {item.name}
         </Link>
       );
@@ -95,9 +105,12 @@ const Header = () => {
       <a
         key={item.name}
         href={item.href}
-        className="text-foreground hover:text-primary transition-colors duration-300 font-medium py-2 text-lg" // Made text larger
-        onClick={(e) => handleSmoothScroll(e, item.href)} // handleSmoothScroll already closes menu
+        className={`flex items-center gap-3 text-foreground hover:text-primary transition-all duration-300 font-medium py-3 text-lg border-b border-border/30 ${
+          isActive ? 'text-primary border-b-2 border-primary' : ''
+        }`}
+        onClick={(e) => handleSmoothScroll(e, item.href)}
       >
+        <Icon className="w-5 h-5" />
         {item.name}
       </a>
     );
@@ -134,14 +147,21 @@ const Header = () => {
           <div className="md:hidden">
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-foreground">
-                  <Menu size={28} />
+                <Button variant="ghost" size="icon" className="text-foreground hover:bg-primary/10">
+                  <div className="relative">
+                    <div className={`w-6 h-0.5 bg-foreground mb-1.5 transition-all ${isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></div>
+                    <div className={`w-6 h-0.5 bg-foreground mb-1.5 transition-all ${isMobileMenuOpen ? 'opacity-0' : ''}`}></div>
+                    <div className={`w-6 h-0.5 bg-foreground transition-all ${isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></div>
+                  </div>
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+              <SheetContent 
+                side="right" 
+                className="w-[320px] sm:w-[400px] bg-gradient-to-b from-background via-background to-background/95 backdrop-blur-xl border-l border-primary/20"
+              >
                 {/* Logo inside menu */}
-                <div className="flex items-center mb-6 pt-4">
+                <div className="flex items-center mb-8 pt-4">
                   <Link 
                     to="/" 
                     className="text-2xl font-bold gradient-text" 
@@ -151,13 +171,25 @@ const Header = () => {
                   </Link>
                 </div>
                 {/* Nav items inside menu */}
-                <nav className="flex flex-col space-y-4">
+                <nav className="flex flex-col">
                   {navItems.map(renderMobileNavItem)}
-                  <Button variant="glow" size="lg" className="w-full mt-4" asChild>
-                    <a href="#contact" onClick={(e) => handleSmoothScroll(e, '#contact')}>
-                      Get Free Consultation
-                    </a>
-                  </Button>
+                  
+                  {/* CTA Section */}
+                  <div className="mt-8 pt-6 border-t border-border/30">
+                    <p className="text-sm text-center text-muted-foreground mb-3">
+                      Ready to grow your business?
+                    </p>
+                    <Button 
+                      variant="glow" 
+                      size="lg" 
+                      className="w-full transition-transform hover:scale-105" 
+                      asChild
+                    >
+                      <a href="#contact" onClick={(e) => handleSmoothScroll(e, '#contact')}>
+                        Get Free Consultation
+                      </a>
+                    </Button>
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>
