@@ -23,7 +23,7 @@ interface Post {
 // ✅ PortableText custom renderers (for styled blocks)
 const ptComponents = {
   types: {
-    image: ({ value }: { value: any }) => (
+    image: ({ value }: any) => (
       <img
         src={urlFor(value).url()}
         alt={value.alt || "Blog post image"}
@@ -32,27 +32,27 @@ const ptComponents = {
     ),
   },
   block: {
-    h2: ({ children }: { children: React.ReactNode }) => (
+    h2: ({ children }: any) => (
       <h2 className="text-3xl font-bold mt-12 mb-4 gradient-text">
         {children}
       </h2>
     ),
-    h3: ({ children }: { children: React.ReactNode }) => (
+    h3: ({ children }: any) => (
       <h3 className="text-2xl font-bold mt-10 mb-4 gradient-text">
         {children}
       </h3>
     ),
-    normal: ({ children }: { children: React.ReactNode }) => (
+    normal: ({ children }: any) => (
       <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
         {children}
       </p>
     ),
-    ul: ({ children }: { children: React.ReactNode }) => (
+    ul: ({ children }: any) => (
       <ul className="list-disc list-inside space-y-3 text-lg text-muted-foreground mb-8 pl-4">
         {children}
       </ul>
     ),
-    li: ({ children }: { children: React.ReactNode }) => (
+    li: ({ children }: any) => (
       <li className="text-lg text-muted-foreground">{children}</li>
     ),
   },
