@@ -14,16 +14,14 @@ const PrivacyPolicy = () => {
         - flex, justify-center, items-center: Centers the content horizontally.
       */}
       <main className="pt-24 pb-16 bg-background text-foreground flex justify-center">
-        {/* Container for the policy text:
-          - max-w-4xl: Limits the width to make text more readable (approx 768px).
-          - w-full: Ensures it takes full width up to max-w-4xl.
-          - px-6 py-10: Horizontal and vertical padding inside the container.
-          - bg-card: Uses your theme's card background color for a distinct section.
-          - rounded-lg: Slightly rounded corners for a modern look.
-          - shadow-lg: Adds a subtle shadow for depth.
-          - border border-border: Adds a subtle border.
-        */}
-        <div className="max-w-4xl w-full px-6 py-10 bg-card rounded-lg shadow-lg border border-border">
+        <div className="max-w-4xl w-full px-6 py-10 bg-card rounded-lg shadow-lg relative overflow-hidden animate-fade-in">
+          {/* Animated glowing border */}
+          <div className="absolute inset-0 rounded-lg overflow-hidden pointer-events-none">
+            <div className="absolute inset-[-2px] bg-gradient-to-r from-primary via-secondary to-primary opacity-50 blur-sm animate-spin-slow"></div>
+          </div>
+          
+          {/* Content wrapper with background */}
+          <div className="relative bg-card rounded-lg p-6 z-10">
           {/* 'prose' classes for typography:
             - prose-lg: Applies a larger, more readable typography set.
             - dark:prose-invert: Ensures good contrast in dark mode.
@@ -240,6 +238,7 @@ const PrivacyPolicy = () => {
               </li>
             </ul>
           </article>
+          </div>
         </div>
       </main>
       <Footer />
