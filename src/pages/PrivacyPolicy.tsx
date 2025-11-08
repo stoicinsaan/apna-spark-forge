@@ -6,18 +6,35 @@ const PrivacyPolicy = () => {
   return (
     <>
       <Header />
-      {/* This main tag has padding-top (pt-24) to avoid being hidden 
-        by the fixed Header (which is h-20, so 24 * 0.25rem = 96px padding)
+      {/* Main content area:
+        - pt-24: Padding top to clear the fixed header.
+        - pb-16: Padding bottom.
+        - bg-background: Uses your theme's background color.
+        - text-foreground: Uses your theme's default text color.
+        - flex, justify-center, items-center: Centers the content horizontally.
       */}
-      <main className="pt-24 pb-16 bg-background text-foreground">
-        <div className="container mx-auto px-4">
-          {/* The 'prose' classes automatically style all the h1, h2, p, ul tags
-            for clean typography. 'dark:prose-invert' handles dark mode.
-            'max-w-none' removes the max-width limit from prose.
+      <main className="pt-24 pb-16 bg-background text-foreground flex justify-center">
+        {/* Container for the policy text:
+          - max-w-4xl: Limits the width to make text more readable (approx 768px).
+          - w-full: Ensures it takes full width up to max-w-4xl.
+          - px-6 py-10: Horizontal and vertical padding inside the container.
+          - bg-card: Uses your theme's card background color for a distinct section.
+          - rounded-lg: Slightly rounded corners for a modern look.
+          - shadow-lg: Adds a subtle shadow for depth.
+          - border border-border: Adds a subtle border.
+        */}
+        <div className="max-w-4xl w-full px-6 py-10 bg-card rounded-lg shadow-lg border border-border">
+          {/* 'prose' classes for typography:
+            - prose-lg: Applies a larger, more readable typography set.
+            - dark:prose-invert: Ensures good contrast in dark mode.
+            - max-w-none: Overrides prose's default max-width to use our custom max-w-4xl.
           */}
-          <article className="prose prose-lg dark:prose-invert max-w-none">
-            <h1>Privacy Policy</h1>
-            <p>
+          <article className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground">
+            {/* Main Title */}
+            <h1 className="text-primary-foreground text-center mb-8">
+              Privacy Policy
+            </h1>
+            <p className="text-center text-sm mb-8">
               <strong>Last Updated:</strong> November 3, 2025
               <br />
               <strong>Effective Date:</strong> November 3, 2025
